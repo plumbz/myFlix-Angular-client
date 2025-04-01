@@ -10,6 +10,7 @@ import { MovieApiService } from '../fetch-api-data.service';
 // This import is used to display notifications back to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-login-form',
@@ -23,7 +24,10 @@ export class UserLoginFormComponent implements OnInit {
   constructor(
     public fetchApiData: MovieApiService,
     public dialogRef: MatDialogRef<UserLoginFormComponent>,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar,
+    public router: Router) { }
+  // Inject the Router here
+
 
   ngOnInit(): void {
   }
@@ -49,6 +53,7 @@ export class UserLoginFormComponent implements OnInit {
         });
 
         // Optionally, you can redirect the user to a different route after login
+        this.router.navigate(['movies']);
         // this.router.navigate(['/dashboard']); // Uncomment this if you have a routing setup
       } else {
         this.snackBar.open('No token received', 'OK', {
