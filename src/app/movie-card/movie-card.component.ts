@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'; // Import MatDialog
 import { MovieApiService } from '../fetch-api-data.service'
 import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component'; // Import your dialog component
+import { Router } from '@angular/router';  // Import Router for navigation
 
 
 @Component({
@@ -11,9 +12,12 @@ import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-
 })
 export class MovieCardComponent {
   movies: any[] = [];
+  favorites: any[] = [];  // Array to hold favorite movies
+  user: any[] = [];
   constructor(
     public fetchApiData: MovieApiService,
-    public dialog: MatDialog // Inject MatDialog
+    public dialog: MatDialog, // Inject MatDialog
+    public router: Router
   ) { }
 
   // Method to open the dialog and display movie details
@@ -37,7 +41,35 @@ export class MovieCardComponent {
   }
 
   ngOnInit(): void {
+    this.getUser();
     this.getMovies();
+  }
+
+  toggleFavorite(movie: any): void {
+    const index = this.favorites.findIndex(fav => fav._id === movie._id);
+    const user = localStorage.getItem('user');
+
+    if (index === -1) {
+      // Add movie to favorites if it's not already there
+      this.favorites.push(movie);
+      if (user) {
+        this.fetchApiData.addMovieToUserFavorites(user, movie.title).subscribe((resp: any) => {
+          // Handle response here (optional)
+          console.log(`Added to favorites: ${movie.title}`);
+        });
+      } else {
+        console.log('User not found');
+      }
+    } else {
+      // Remove movie from favorites if it exists
+      this.favorites.splice(index, 1);
+      console.log(`Removed from favorites: ${movie.title}`);
+    }
+  }
+
+  // Method to check if the movie is in the favorites list
+  isFavorite(movie: any): boolean {
+    return this.favorites.some(fav => fav._id === movie._id);
   }
 
   getMovies(): void {
@@ -46,5 +78,27 @@ export class MovieCardComponent {
       console.log(this.movies);
       return this.movies;
     });
+  }
+  getUser(): void {
+    this.fetchApiData.getUser().subscribe((resp: any) => {
+      const loggedinUser = localStorage.getItem('user');
+      console.log('logged in user :');
+      console.log(loggedinUser);
+      this.user = resp.find((user: any) => user.username === loggedinUser);
+      console.log(this.user);
+      return this.user;
+    });
+  }
+  // Method to log out the user
+  logout(): void {
+    // Clear any stored session or token
+    localStorage.removeItem('authToken'); // Example: remove authentication token
+    sessionStorage.removeItem('authToken'); // Example: remove token from sessionStorage
+    localStorage.removeItem('user'); // Example: remove authentication token
+    sessionStorage.removeItem('user'); // Example: remove token from sessionStorage
+
+    // Optionally, redirect to the login page after logging out
+    this.router.navigate(['/welcome']); // Navigate to the login page
+    console.log('User logged out');
   }
 }

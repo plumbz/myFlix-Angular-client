@@ -15,9 +15,15 @@
             <button mat-button color="primary" (click)="openDetailDialog('synopsis', movie)">
                 Synopsis
             </button>
-            <button mat-button color="accent">
-                <mat-icon>favorite_border</mat-icon> Favorite
+
+            <!-- Favorite button toggles the favorite status -->
+            <button mat-icon-button color="accent" (click)="toggleFavorite(movie)">
+                <mat-icon>{{ isFavorite(movie) ? 'favorite' : 'favorite_border' }}</mat-icon>
             </button>
         </mat-card-actions>
     </mat-card>
+    <!-- Logout button -->
+    <div style="text-align: center; margin-top: 20px;">
+        <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+    </div>
 </div>

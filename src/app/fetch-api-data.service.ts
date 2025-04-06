@@ -96,11 +96,10 @@ export class MovieApiService {
   //Making api call for adding movie to users favorite
   public addMovieToUserFavorites(userName: string, title: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.post(apiUrl + 'users/${userName}/favorites/${title}', {
-      headers: new HttpHeaders(
-        {
-          Authorization: 'Bearer ' + token,
-        })
+    return this.http.post(`${apiUrl}users/${userName}/favorites/${title}`, null, {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + token
+      })
     }).pipe(
       map(this.extractResponseData),
       catchError(this.handleError)

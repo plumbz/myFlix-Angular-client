@@ -19,6 +19,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     <div mat-dialog-actions class="dialog-actions">
       <button mat-button (click)="closeDialog()">Close</button>
     </div>
+    
   `,
   styles: [
     `
