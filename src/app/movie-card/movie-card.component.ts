@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'; // Import MatDialog
 import { MovieApiService } from '../fetch-api-data.service'
 import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component'; // Import your dialog component
-import { Router } from '@angular/router';  // Import Router for navigation
 
 
 @Component({
@@ -16,8 +15,8 @@ export class MovieCardComponent {
   user: any[] = [];
   constructor(
     public fetchApiData: MovieApiService,
-    public dialog: MatDialog, // Inject MatDialog
-    public router: Router
+    public dialog: MatDialog // Inject MatDialog
+
   ) { }
 
   // Method to open the dialog and display movie details
@@ -88,17 +87,5 @@ export class MovieCardComponent {
       console.log(this.user);
       return this.user;
     });
-  }
-  // Method to log out the user
-  logout(): void {
-    // Clear any stored session or token
-    localStorage.removeItem('authToken'); // Example: remove authentication token
-    sessionStorage.removeItem('authToken'); // Example: remove token from sessionStorage
-    localStorage.removeItem('user'); // Example: remove authentication token
-    sessionStorage.removeItem('user'); // Example: remove token from sessionStorage
-
-    // Optionally, redirect to the login page after logging out
-    this.router.navigate(['/welcome']); // Navigate to the login page
-    console.log('User logged out');
   }
 }

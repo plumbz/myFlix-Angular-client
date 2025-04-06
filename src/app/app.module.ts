@@ -18,7 +18,9 @@ import { MovieCardComponent } from './movie-card/movie-card.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MovieDetailDialogComponent } from './movie-detail-dialog/movie-detail-dialog.component';
+import { ProfileViewComponent } from './profile-view/profile-view.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
@@ -33,7 +35,8 @@ const appRoutes: Routes = [
     UserLoginFormComponent,
     MovieCardComponent,
     WelcomePageComponent,
-    MovieDetailDialogComponent
+    MovieDetailDialogComponent,
+    ProfileViewComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,7 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatSnackBarModule,
     MatIconModule,
-
+    MatToolbarModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],
