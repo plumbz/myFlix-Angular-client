@@ -108,7 +108,7 @@ export class MovieApiService {
   //Making api call for editing user info
   public editUserData(userName: string, userDetails: any): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.put(apiUrl + 'users/${userName}', userDetails, {
+    return this.http.put(`${apiUrl}users/${userName}`, userDetails, {
       headers: new HttpHeaders(
         {
           Authorization: 'Bearer ' + token,
@@ -134,7 +134,7 @@ export class MovieApiService {
   //Making api call for deleting a movie from users favorites
   public deleteMovieFromUserFavorites(userName: string, title: string): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.delete(apiUrl + 'users/${userName}/favorites/${title}', {
+    return this.http.delete(`${apiUrl}users/${userName}/favorites/${title}`, {
       headers: new HttpHeaders(
         {
           Authorization: 'Bearer ' + token,

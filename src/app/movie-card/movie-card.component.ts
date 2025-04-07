@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'; // Import MatDialog
 import { MovieApiService } from '../fetch-api-data.service'
 import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component'; // Import your dialog component
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-movie-card',
@@ -15,8 +15,8 @@ export class MovieCardComponent {
   user: any[] = [];
   constructor(
     public fetchApiData: MovieApiService,
-    public dialog: MatDialog // Inject MatDialog
-
+    public dialog: MatDialog, // Inject MatDialog
+    private snackBar: MatSnackBar
   ) { }
 
   // Method to open the dialog and display movie details
@@ -60,7 +60,25 @@ export class MovieCardComponent {
         console.log('User not found');
       }
     } else {
-      // Remove movie from favorites if it exists
+      if (user) {
+        // Remove movie from favorites if it exists
+        this.fetchApiData.deleteMovieFromUserFavorites(user, movie.title).subscribe(
+          () => {
+            // console.log(`${movie.Title} removed from favorites.`);
+            this.favorites = this.favorites.filter(
+              (favMovie) => favMovie._id !== movie._id
+            ); // Correctly update the UI
+          },
+          (error) => {
+            // console.error(`Error removing ${movie.Title} from favorites:`, error);
+            this.snackBar.open(
+              `Could not remove ${movie.title} from favorites.`,
+              'OK',
+              { duration: 3000 }
+            );
+          }
+        );
+      }
       this.favorites.splice(index, 1);
       console.log(`Removed from favorites: ${movie.title}`);
     }
