@@ -1,47 +1,50 @@
-<div *ngIf="user; else loadingTemplate">
+<div class="profile-container" *ngIf="user; else loadingTemplate">
     <h2>User Profile</h2>
     <div class="profile-info">
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Full Name:</strong> {{ user.firstName }} {{ user.lastName }}</p>
+
+        <div class="profile-buttons">
+            <button (click)="editProfile()">Edit Profile</button>
+            <button (click)="deleteProfile()">Delete Profile</button>
+        </div>
     </div>
 
-    <button (click)="editProfile()">Edit Profile</button>
-    <button (click)="deleteProfile()">Delete Profile</button>
+
+    <form [formGroup]="editForm" *ngIf="isEditing" (ngSubmit)="saveChanges()">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username" formControlName="username" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="firstName">Firstname</label>
+            <input id="firstName" formControlName="firstName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="lastName">Lastname</label>
+            <input id="lastName" formControlName="lastName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" formControlName="password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" formControlName="email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="birthday">Birthday</label>
+            <input id="birthday" formControlName="birthday" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel
+
+
+        </button>
+    </form>
 </div>
-
-<form [formGroup]="editForm" *ngIf="isEditing" (ngSubmit)="saveChanges()">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input id="username" formControlName="username" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="firstName">Firstname</label>
-        <input id="firstName" formControlName="firstName" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="lastName">Lastname</label>
-        <input id="lastName" formControlName="lastName" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" type="password" formControlName="password" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" formControlName="email" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="birthday">Birthday</label>
-        <input id="birthday" formControlName="birthday" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-success">Save</button>
-    <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel
-
-
-    </button>
-</form>
 <ng-template #loadingTemplate>
     <p>Loading user profile...</p>
 </ng-template>
