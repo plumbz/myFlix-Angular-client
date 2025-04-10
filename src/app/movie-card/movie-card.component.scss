@@ -21,8 +21,11 @@
 .movie-card img {
     width: 100%;
     /* Makes the image fill the width of the card */
-    height: auto;
+    height: 90%;
     /* Maintains aspect ratio */
+    object-fit: cover;
+    /* This ensures images fill the space without distortion, cropping if necessary */
+
 }
 
 mat-card-header {

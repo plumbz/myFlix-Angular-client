@@ -65,21 +65,21 @@ button {
 }
 
 .btn-primary {
-    background-color: #277ee7; // Red button
+    background-color: #277ee7; // Blue button
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #2565c4; // Darker red on hover
+    background-color: #2565c4; // Darker blue on hover
 }
 
 .btn-success {
-    background-color: #2565c4; // Green for save
+    background-color: #2565c4; // Blue for save
     color: #fff;
 }
 
 .btn-success:hover {
-    background-color: #277ee7; // Darker green on hover
+    background-color: #277ee7; // Brighter blue on hover
 }
 
 .btn-secondary {
@@ -126,7 +126,9 @@ button {
 
         .movie-image {
             width: 100%;
-            height: auto;
+            height: 90%;
+            /* Maintains aspect ratio */
+            object-fit: cover;
             border-radius: 8px 8px 0 0;
         }
 
