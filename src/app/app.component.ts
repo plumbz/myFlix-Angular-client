@@ -1,49 +1,71 @@
-// src/app/app.component.ts
 import { Component } from '@angular/core';
 import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserLoginFormComponent } from './user-login-form/user-login-form.component';
 import { MovieCardComponent } from './movie-card/movie-card.component';
-import { Router } from '@angular/router';  // Import Router for navigation
+import { Router } from '@angular/router';
 
+/**
+ * Root component of the MyFlix Angular application.
+ * Manages top-level dialogs and routing such as login, registration, and logout.
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  /**
+   * The title of the application.
+   */
   title = 'myFlix-Angular-client';
 
-  constructor(public dialog: MatDialog,
-    public router: Router) { }
-  // This is the function that will open the dialog when the signup button is clicked  
+  /**
+   * Creates an instance of the root component.
+   * 
+   * @param dialog Angular Material dialog service for opening modal windows
+   * @param router Angular Router for navigation
+   */
+  constructor(public dialog: MatDialog, public router: Router) { }
+
+  /**
+   * Opens the user registration dialog.
+   */
   openUserRegistrationDialog(): void {
     this.dialog.open(UserRegistrationFormComponent, {
-      // Assigning the dialog a width
       width: '280px'
     });
   }
+
+  /**
+   * Opens the user login dialog.
+   */
   openUserLoginDialog(): void {
     this.dialog.open(UserLoginFormComponent, {
-      // Assigning the dialog a width
       width: '280px'
     });
   }
+
+  /**
+   * Opens the movie card dialog component.
+   */
   openMoviesDialog(): void {
     this.dialog.open(MovieCardComponent, {
       width: '500px'
     });
   }
-  // Method to log out the user
-  logout(): void {
-    // Clear any stored session or token
-    localStorage.removeItem('authToken'); // Example: remove authentication token
-    sessionStorage.removeItem('authToken'); // Example: remove token from sessionStorage
-    localStorage.removeItem('user'); // Example: remove authentication token
-    sessionStorage.removeItem('user'); // Example: remove token from sessionStorage
 
-    // Optionally, redirect to the login page after logging out
-    this.router.navigate(['/welcome']); // Navigate to the login page
+  /**
+   * Logs out the current user by removing session and local storage tokens,
+   * and redirects the user to the welcome page.
+   */
+  logout(): void {
+    localStorage.removeItem('authToken');
+    sessionStorage.removeItem('authToken');
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+
+    this.router.navigate(['/welcome']);
     console.log('User logged out');
   }
 }

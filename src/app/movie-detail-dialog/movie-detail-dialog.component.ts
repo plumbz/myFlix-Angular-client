@@ -1,6 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Component for displaying detailed movie information in a modal dialog.
+ * 
+ * Depending on the data provided, it can show:
+ * - Director details
+ * - Genre details
+ * - Synopsis
+ */
 @Component({
   selector: 'app-movie-detail-dialog',
   template: `
@@ -19,7 +27,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     <div mat-dialog-actions class="dialog-actions">
       <button mat-button (click)="closeDialog()">Close</button>
     </div>
-    
   `,
   styles: [
     `
@@ -43,14 +50,21 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   ]
 })
 export class MovieDetailDialogComponent {
+  /**
+   * Creates an instance of MovieDetailDialogComponent.
+   * 
+   * @param data The movie data injected into the dialog (title, genre, director, or synopsis)
+   * @param dialogRef Reference to the dialog box, used to close it
+   */
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,        // Inject movie data
-    private dialogRef: MatDialogRef<MovieDetailDialogComponent>  // Inject MatDialogRef to close the dialog
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<MovieDetailDialogComponent>
   ) { }
 
+  /**
+   * Closes the dialog.
+   */
   closeDialog(): void {
-    // Close the dialog
     this.dialogRef.close();
   }
 }
-

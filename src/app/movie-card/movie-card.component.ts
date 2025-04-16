@@ -1,25 +1,64 @@
+/**
+ * The MovieCardComponent displays a list of movies and allows users to view movie details, 
+ * manage their favorite movies, and interact with the backend API for user and movie data.
+ * It provides functionality for adding/removing movies to/from the user's favorite list 
+ * and viewing movie details through a dialog.
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'; // Import MatDialog
-import { MovieApiService } from '../fetch-api-data.service'
-import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component'; // Import your dialog component
+import { MovieApiService } from '../fetch-api-data.service';
+import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component'; // Import dialog component
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+/**
+ * A component that handles the display of movies, management of user favorites, 
+ * and interaction with movie details via a dialog.
+ * 
+ */
 @Component({
   selector: 'app-movie-card',
   templateUrl: './movie-card.component.html',
   styleUrls: ['./movie-card.component.scss']
 })
-export class MovieCardComponent {
+export class MovieCardComponent implements OnInit {
+  /** 
+   * Array to hold all movies fetched from the API.
+   * @type {any[]}
+   */
   movies: any[] = [];
-  favorites: any[] = [];  // Array to hold favorite movies
+
+  /** 
+   * Array to hold user's favorite movies.
+   * @type {any[]}
+   */
+  favorites: any[] = [];
+
+  /** 
+   * Array to hold user details.
+   * @type {any[]}
+   */
   user: any[] = [];
+
+  /**
+   * Constructs the MovieCardComponent.
+   * 
+   * @param {MovieApiService} fetchApiData - Service to interact with the movie API.
+   * @param {MatDialog} dialog - Dialog service to open modals for displaying movie details.
+   * @param {MatSnackBar} snackBar - Service for displaying snack-bar notifications.
+   */
   constructor(
     public fetchApiData: MovieApiService,
-    public dialog: MatDialog, // Inject MatDialog
+    public dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { }
 
-  // Method to open the dialog and display movie details
+  /**
+   * Opens a dialog to display movie details based on the specified type.
+   * 
+   * @param {string} type - Type of movie detail to display (e.g., genre, director, synopsis).
+   * @param {any} movie - The movie object whose details are to be displayed.
+   */
   openDetailDialog(type: string, movie: any): void {
     let data;
 
@@ -39,11 +78,21 @@ export class MovieCardComponent {
     });
   }
 
+  /**
+   * Lifecycle hook that is called when the component is initialized.
+   * It fetches the current user and the list of movies.
+   */
   ngOnInit(): void {
     this.getUser();
     this.getMovies();
   }
 
+  /**
+   * Toggles the addition/removal of a movie from the user's favorites.
+   * If the movie is not in favorites, it will be added, otherwise, it will be removed.
+   * 
+   * @param {any} movie - The movie object to be added/removed from the favorites.
+   */
   toggleFavorite(movie: any): void {
     const index = this.favorites.findIndex(fav => fav._id === movie._id);
     const user = localStorage.getItem('user');
@@ -53,7 +102,6 @@ export class MovieCardComponent {
       this.favorites.push(movie);
       if (user) {
         this.fetchApiData.addMovieToUserFavorites(user, movie.title).subscribe((resp: any) => {
-          // Handle response here (optional)
           console.log(`Added to favorites: ${movie.title}`);
         });
       } else {
@@ -61,16 +109,13 @@ export class MovieCardComponent {
       }
     } else {
       if (user) {
-        // Remove movie from favorites if it exists
         this.fetchApiData.deleteMovieFromUserFavorites(user, movie.title).subscribe(
           () => {
-            // console.log(`${movie.Title} removed from favorites.`);
             this.favorites = this.favorites.filter(
               (favMovie) => favMovie._id !== movie._id
-            ); // Correctly update the UI
+            );
           },
           (error) => {
-            // console.error(`Error removing ${movie.Title} from favorites:`, error);
             this.snackBar.open(
               `Could not remove ${movie.title} from favorites.`,
               'OK',
@@ -84,11 +129,19 @@ export class MovieCardComponent {
     }
   }
 
-  // Method to check if the movie is in the favorites list
+  /**
+   * Checks whether a movie is already in the user's favorites.
+   * 
+   * @param {any} movie - The movie object to be checked.
+   * @returns {boolean} - Returns true if the movie is in favorites, otherwise false.
+   */
   isFavorite(movie: any): boolean {
     return this.favorites.some(fav => fav._id === movie._id);
   }
 
+  /**
+   * Fetches the list of movies from the API and assigns them to the movies array.
+   */
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
@@ -96,6 +149,12 @@ export class MovieCardComponent {
       return this.movies;
     });
   }
+
+  /**
+   * Fetches the details of the currently logged-in user from the API.
+   * 
+   * The user's information is fetched and stored in the user array.
+   */
   getUser(): void {
     this.fetchApiData.getUser().subscribe((resp: any) => {
       const loggedinUser = localStorage.getItem('user');

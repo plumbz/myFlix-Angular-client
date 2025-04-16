@@ -1,46 +1,67 @@
-// src/app/user-registration-form/user-registration-form.component.ts
 import { Component, OnInit, Input } from '@angular/core';
-
-// You'll use this import to close the dialog on success
 import { MatDialogRef } from '@angular/material/dialog';
-
-// This import brings in the API calls we created in 6.2
 import { MovieApiService } from '../fetch-api-data.service';
-
-// This import is used to display notifications back to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
+/**
+ * Component for user registration form.
+ * Handles user sign-up by submitting user data to the backend API.
+ * Displays feedback using snackbars and closes the dialog on success.
+ */
 @Component({
   selector: 'app-user-registration-form',
   templateUrl: './user-registration-form.component.html',
   styleUrls: ['./user-registration-form.component.scss']
 })
 export class UserRegistrationFormComponent implements OnInit {
+  /**
+   * Input model containing user registration fields.
+   */
+  @Input() userData = {
+    username: '',
+    password: '',
+    email: '',
+    birthday: '',
+    firstName: '',
+    lastName: ''
+  };
 
-  @Input() userData = { username: '', password: '', email: '', birthday: '', firstName: '', lastName: '' };
-
+  /**
+   * Creates an instance of UserRegistrationFormComponent.
+   *
+   * @param fetchApiData Service for API communication
+   * @param dialogRef Reference to the dialog window, allowing it to be closed
+   * @param snackBar Material snackbar service for displaying messages
+   */
   constructor(
     public fetchApiData: MovieApiService,
     public dialogRef: MatDialogRef<UserRegistrationFormComponent>,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar
+  ) { }
 
-  ngOnInit(): void {
-  }
+  /**
+   * Lifecycle hook called after component initialization.
+   */
+  ngOnInit(): void { }
 
-  // This is the function responsible for sending the form inputs to the backend
+  /**
+   * Submits user registration data to the backend.
+   * On success: closes the dialog and displays a success snackbar.
+   * On failure: shows an error message in a snackbar.
+   */
   registerUser(): void {
-    this.fetchApiData.userRegistration(this.userData).subscribe((result) => {
-      // Logic for a successful user registration goes here! (To be implemented)
-      this.dialogRef.close(); // This will close the modal on success!
-      this.snackBar.open(result, 'OK', {
-        duration: 2000
-      });
-    }, (result) => {
-      this.snackBar.open(result, 'OK', {
-        duration: 2000
-      });
-    });
+    this.fetchApiData.userRegistration(this.userData).subscribe(
+      (result) => {
+        this.dialogRef.close(); // Close modal on success
+        this.snackBar.open(result, 'OK', {
+          duration: 2000
+        });
+      },
+      (result) => {
+        this.snackBar.open(result, 'OK', {
+          duration: 2000
+        });
+      }
+    );
   }
-
 }
