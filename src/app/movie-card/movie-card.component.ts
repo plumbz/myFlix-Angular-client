@@ -83,8 +83,7 @@ export class MovieCardComponent implements OnInit {
    * It fetches the current user and the list of movies.
    */
   ngOnInit(): void {
-    this.getUser();
-    this.getMovies();
+    this.getUserAndMovies();
   }
 
   /**
@@ -94,12 +93,13 @@ export class MovieCardComponent implements OnInit {
    * @param {any} movie - The movie object to be added/removed from the favorites.
    */
   toggleFavorite(movie: any): void {
-    const index = this.favorites.findIndex(fav => fav._id === movie._id);
+    const movieId = movie._id;
     const user = localStorage.getItem('user');
+    const isFav = this.favorites.includes(movieId)
 
-    if (index === -1) {
+    if (!isFav) {
       // Add movie to favorites if it's not already there
-      this.favorites.push(movie);
+      this.favorites.push(movie._id);
       if (user) {
         this.fetchApiData.addMovieToUserFavorites(user, movie.title).subscribe((resp: any) => {
         });
@@ -110,9 +110,7 @@ export class MovieCardComponent implements OnInit {
       if (user) {
         this.fetchApiData.deleteMovieFromUserFavorites(user, movie.title).subscribe(
           () => {
-            this.favorites = this.favorites.filter(
-              (favMovie) => favMovie._id !== movie._id
-            );
+            this.favorites = this.favorites.filter(id => id !== movieId);
           },
           (error) => {
             this.snackBar.open(
@@ -123,7 +121,6 @@ export class MovieCardComponent implements OnInit {
           }
         );
       }
-      this.favorites.splice(index, 1);
     }
   }
 
@@ -134,7 +131,8 @@ export class MovieCardComponent implements OnInit {
    * @returns {boolean} - Returns true if the movie is in favorites, otherwise false.
    */
   isFavorite(movie: any): boolean {
-    return this.favorites.some(fav => fav._id === movie._id);
+    //return this.favorites.some(fav => fav._id === movie._id);
+    return this.favorites.includes(movie._id);
   }
 
   /**
@@ -143,6 +141,7 @@ export class MovieCardComponent implements OnInit {
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
+      console.log(this.movies);
       return this.movies;
     });
   }
@@ -152,10 +151,14 @@ export class MovieCardComponent implements OnInit {
    * 
    * The user's information is fetched and stored in the user array.
    */
-  getUser(): void {
+  getUserAndMovies(): void {
     this.fetchApiData.getUser().subscribe((resp: any) => {
       this.user = resp
-      return this.user;
+      this.favorites = resp.favorites;
+      console.log(this.user);
+      console.log(resp.favorites);
+      //return this.user;
+      this.getMovies();
     });
   }
 }
