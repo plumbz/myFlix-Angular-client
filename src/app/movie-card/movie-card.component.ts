@@ -141,7 +141,6 @@ export class MovieCardComponent implements OnInit {
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
-      console.log(this.movies);
       return this.movies;
     });
   }
@@ -155,8 +154,6 @@ export class MovieCardComponent implements OnInit {
     this.fetchApiData.getUser().subscribe((resp: any) => {
       this.user = resp
       this.favorites = resp.favorites;
-      console.log(this.user);
-      console.log(resp.favorites);
       //return this.user;
       this.getMovies();
     });
