@@ -74,8 +74,7 @@ export class ProfileViewComponent implements OnInit {
    */
   getUser(): void {
     this.fetchApiData.getUser().subscribe((resp: any) => {
-      const loggedinUser = localStorage.getItem('user');
-      this.user = resp.find((user: any) => user.username === loggedinUser);
+      this.user = resp
       this.editForm.patchValue({
         username: this.user.username,
         firstName: this.user.firstName,
