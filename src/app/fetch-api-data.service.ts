@@ -29,7 +29,6 @@ export class MovieApiService {
    * @returns Observable of server response.
    */
   public userRegistration(userDetails: any): Observable<any> {
-    console.log(userDetails);
     return this.http.post(apiUrl + 'users', userDetails).pipe(
       catchError(this.handleError)
     );
@@ -41,7 +40,6 @@ export class MovieApiService {
    * @returns Observable of login response.
    */
   public userLogin(userDetails: any): Observable<any> {
-    console.log(userDetails);
     return this.http.post(apiUrl + 'login', userDetails).pipe(
       catchError(this.handleError)
     );

@@ -102,7 +102,6 @@ export class MovieCardComponent implements OnInit {
       this.favorites.push(movie);
       if (user) {
         this.fetchApiData.addMovieToUserFavorites(user, movie.title).subscribe((resp: any) => {
-          console.log(`Added to favorites: ${movie.title}`);
         });
       } else {
         console.log('User not found');
@@ -125,7 +124,6 @@ export class MovieCardComponent implements OnInit {
         );
       }
       this.favorites.splice(index, 1);
-      console.log(`Removed from favorites: ${movie.title}`);
     }
   }
 
@@ -145,7 +143,6 @@ export class MovieCardComponent implements OnInit {
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
-      console.log(this.movies);
       return this.movies;
     });
   }
@@ -157,11 +154,7 @@ export class MovieCardComponent implements OnInit {
    */
   getUser(): void {
     this.fetchApiData.getUser().subscribe((resp: any) => {
-      const loggedinUser = localStorage.getItem('user');
-      console.log('logged in user :');
-      console.log(loggedinUser);
-      this.user = resp.find((user: any) => user.username === loggedinUser);
-      console.log(this.user);
+      this.user = resp
       return this.user;
     });
   }

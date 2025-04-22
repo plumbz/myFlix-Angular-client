@@ -66,6 +66,5 @@ export class AppComponent {
     sessionStorage.removeItem('user');
 
     this.router.navigate(['/welcome']);
-    console.log('User logged out');
   }
 }
